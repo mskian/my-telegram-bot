@@ -39,16 +39,6 @@ app.post('/', (req, res) => {
             }).catch((error) => {
                 res.send(error);
             });
-    } else if (sentMessage.match(/tamilsms/gi)) {
-        axios.post(`${url}${apiToken}/sendMessage`, {
-                chat_id: chatId,
-                text: 'ஒன்றை பெற வேண்டும்\nஎன்று நினைத்து விட்டால்\nஅதை அடையும் வரை\nஇறுதி வரை போராடு\nஅதனால் ஏற்படும்\nவிளைவுகளையோ\nஇழப்புகளையோ\nநினைத்து வருந்தாதே',
-            })
-            .then((response) => {
-                res.status(200).send(response);
-            }).catch((error) => {
-                res.send(error);
-            });
     } else {
         axios.post(`${url}${apiToken}/sendMessage`, {
                 chat_id: chatId,
