@@ -18,11 +18,11 @@ app.listen(port, () => {
 
 app.post('/', (req, res) => {
     const chatId = req.body.message.chat.id;
-    const sentMessage = req.body.message.text;
+    const sentMessage = req.body.message.text || req.body.message.sticker.file_id;
     if (sentMessage.match(/start/gi)) {
         axios.post(`${url}${apiToken}/sendMessage`, {
                 chat_id: chatId,
-                text: 'Hello I am Bot 🤖',
+                text: 'Hi I am Bot 🤖',
             })
             .then((response) => {
                 res.status(200).send(response);
@@ -52,7 +52,7 @@ app.post('/', (req, res) => {
     } else {
         axios.post(`${url}${apiToken}/sendMessage`, {
                 chat_id: chatId,
-                text: 'request not understood,\nSorry I am not Programmed for All Keywords\nUse this Commands\n/start\n/quotes\n/tamilsms',
+                text: 'Request not understood,\nSorry Sir/Madam I am not Programmed for All Keywords\nUse this Below Commands\n/start\n/quotes\n/tamilsms',
             })
             .then((response) => {
                 res.status(200).send(response);
