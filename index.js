@@ -17,6 +17,8 @@ app.listen(port, () => {
 });
 
 app.post('/', (req, res) => {
+    var quotesContent = require('./quoteswritten.json');
+    var random = quotesContent.quoteswritten[Math.floor(Math.random() * quotesContent.quoteswritten.length)];
     const chatId = req.body.message.chat.id;
     const sentMessage = req.body.message.text || req.body.message.sticker.file_id;
     if (sentMessage.match(/start/gi)) {
@@ -32,7 +34,7 @@ app.post('/', (req, res) => {
     } else if (sentMessage.match(/quotes/gi)) {
         axios.post(`${url}${apiToken}/sendMessage`, {
                 chat_id: chatId,
-                text: 'Time goes on. So whatever you"re GOING to do, do it. Do it now. Don"t wait.',
+                text: random.quotes,
             })
             .then((response) => {
                 res.status(200).send(response);
