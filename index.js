@@ -44,7 +44,7 @@ app.post('/', (req, res) => {
     } else {
         axios.post(`${url}${apiToken}/sendMessage`, {
                 chat_id: chatId,
-                text: 'Request not understood,\nSorry Sir/Madam I am not Programmed for All Keywords\nUse this Below Commands\n/start\n/quotes\n/tamilsms',
+                text: 'Request not understood,\nSorry Sir/Madam I am not Programmed for All Keywords\nUse this Below Commands\n/start\n/quotes',
             })
             .then((response) => {
                 res.status(200).send(response);
