@@ -3,21 +3,25 @@ const app = express();
 const axios = require('axios');
 const bodyParser = require('body-parser');
 
-const port = 8080;
+const port = process.env.PORT || 8080;
+
+// Telegram Config
 const url = 'https://api.telegram.org/bot';
 const apiToken = process.env.BOTAPIKEY;
 
+let quotesContent = require('./quoteswritten.json');
+// Middleware Config
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+// Listenting Server
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });
 
 app.post('/', (req, res) => {
-    var quotesContent = require('./quoteswritten.json');
     var random = quotesContent.quoteswritten[Math.floor(Math.random() * quotesContent.quoteswritten.length)];
     const chatId = req.body.message.chat.id;
     const sentMessage = req.body.message.text || req.body.message.sticker.file_id;
