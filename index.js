@@ -18,10 +18,22 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.enable('trust proxy', true);
+app.disable('x-powered-by');
 
-// Listenting Server
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
+/**
+ * CORS
+ */
+
+app.use((req, res, next) => {
+    req.userip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS, POST, PUT, DELETE');
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, authtoken, contentType, Content-Type, authorization'
+    );
+    next();
 });
 
 app.post('/', (req, res) => {
@@ -30,9 +42,9 @@ app.post('/', (req, res) => {
     const sentMessage = req.body.message.text || req.body.message.sticker.file_id;
     if (sentMessage.match(/start/gi)) {
         axios.post(`${url}${apiToken}/sendMessage`, {
-                chat_id: chatId,
-                text: 'Hi I am Bot 🤖',
-            })
+            chat_id: chatId,
+            text: 'Hi I am Bot 🤖',
+        })
             .then((response) => {
                 res.status(200).send(response);
             }).catch((error) => {
@@ -40,9 +52,9 @@ app.post('/', (req, res) => {
             });
     } else if (sentMessage.match(/quotes/gi)) {
         axios.post(`${url}${apiToken}/sendMessage`, {
-                chat_id: chatId,
-                text: random.quotes,
-            })
+            chat_id: chatId,
+            text: random.quotes,
+        })
             .then((response) => {
                 res.status(200).send(response);
             }).catch((error) => {
@@ -50,9 +62,9 @@ app.post('/', (req, res) => {
             });
     } else {
         axios.post(`${url}${apiToken}/sendMessage`, {
-                chat_id: chatId,
-                text: 'Request not understood,\nSorry Sir/Madam I am not Programmed for All Keywords\nUse this Below Commands\n/start\n/quotes',
-            })
+            chat_id: chatId,
+            text: 'Request not understood,\nSorry Sir/Madam I am not Programmed for All Keywords\nUse this Below Commands\n/start\n/quotes',
+        })
             .then((response) => {
                 res.status(200).send(response);
             }).catch((error) => {
@@ -60,3 +72,19 @@ app.post('/', (req, res) => {
             });
     }
 });
+
+
+// 404 handler
+
+app.use((req, res) => {
+    res.status(404).json({
+        error: 1,
+        message: 'URL Not Found'
+    });
+});
+
+// Listenting Server
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+});
+
